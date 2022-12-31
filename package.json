@@ -1,7 +1,7 @@
 {
   "name": "@schminkel/frappe-gantt",
-  "version": "0.6.1.1",
-  "description": "A simple, modern, interactive gantt library for the web",
+  "version": "0.0.1",
+  "description": "A simple, modern, interactive gantt library for the web (based on 0.6.1 of frappe/gantt)",
   "main": "src/index.js",
   "scripts": {
     "start": "yarn run dev",
