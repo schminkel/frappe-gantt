@@ -17,7 +17,7 @@
 # install dependencies
 yarn
 
-# run dev server (open index.html in browser)
+# run dev files (open index.html in browser)
 yarn run dev
 
 # generate dist folder files
