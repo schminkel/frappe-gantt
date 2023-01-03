@@ -7,7 +7,7 @@ $light-yellow: #fcf8e3 !default;
 $text-muted: #666 !default;
 $text-light: #555 !default;
 $text-color: #333 !default;
-$blue: #a3a3ff !default;
+$blue: #2490ef !default;
 $handle-color: #ddd !default;
 
 .gantt {
@@ -94,6 +94,7 @@ $handle-color: #ddd !default;
 		&:hover {
 			.bar {
 				fill: darken($bar-color, 5);
+				stroke-width: 2;
 			}
 
 			.bar-progress {

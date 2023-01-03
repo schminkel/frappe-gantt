@@ -652,7 +652,7 @@ var Gantt = (function () {
                     return;
                 }
 
-                this.gantt.trigger_event('click', [this.task]);
+                this.gantt.trigger_event('dblclick', [this.task]);
             });
         }
 
@@ -1828,6 +1828,14 @@ var Gantt = (function () {
                             return;
                         }
                         bar.update_bar_position({ y: y });
+
+                        const bar_being_dragged_id = bar_being_dragged.task.id;
+                        const bar_being_replaced_id = bar.task.id;
+
+                        this.trigger_event('bar_sort', [
+                            bar_being_dragged_id,
+                            bar_being_replaced_id,
+                        ]);
                     });
                 }
             });

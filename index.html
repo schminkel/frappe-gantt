@@ -3,6 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Simple Gantt</title>
+	<link rel="stylesheet" href="dist/frappe-gantt.css" />
+	<script src="dist/frappe-gantt.js"></script>
 	<style>
 		body {
 			font-family: sans-serif;
@@ -17,8 +19,6 @@
 			fill: tomato;
 		}
 	</style>
-	<link rel="stylesheet" href="dist/frappe-gantt.css" />
-	<script src="dist/frappe-gantt.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -30,14 +30,14 @@
 			{
 				start: '2022-10-01',
 				end: '2022-10-08',
-				name: 'Redesign website',
+				name: 'Redesign website 0',
 				id: "Task 0",
 				progress: 20
 			},
 			{
 				start: '2022-10-03',
 				end: '2022-10-06',
-				name: 'Write new content',
+				name: 'Write new content 1',
 				id: "Task 1",
 				progress: 5,
 				dependencies: 'Task 0'
@@ -45,7 +45,7 @@
 			{
 				start: '2022-10-04',
 				end: '2022-10-08',
-				name: 'Apply new styles',
+				name: 'Apply new styles 2',
 				id: "Task 2",
 				progress: 10,
 				dependencies: 'Task 1'
@@ -53,7 +53,7 @@
 			{
 				start: '2022-10-08',
 				end: '2022-10-09',
-				name: 'Review',
+				name: 'Review 3',
 				id: "Task 3",
 				progress: 5,
 				dependencies: 'Task 2'
@@ -61,7 +61,7 @@
 			{
 				start: '2022-10-08',
 				end: '2022-10-10',
-				name: 'Deploy',
+				name: 'Deploy 4',
 				id: "Task 4",
 				progress: 0,
 				dependencies: 'Task 2'
@@ -69,7 +69,7 @@
 			{
 				start: '2022-10-11',
 				end: '2022-10-11',
-				name: 'Go Live!',
+				name: 'Go Live! 5',
 				id: "Task 5",
 				progress: 0,
 				dependencies: 'Task 4',
@@ -77,22 +77,25 @@
 			}
 		]
 		var gantt_chart = new Gantt(".gantt-target", tasks, {
-			on_click: function (task) {
-				console.log(task);
+			on_dblclick: function (task) {
+				console.log("### on_dblclick: ", task);
 			},
 			on_date_change: function(task, start, end) {
-				console.log(task, start, end);
+				console.log("### on_date_change: ", task, start, end);
 			},
 			on_progress_change: function(task, progress) {
-				console.log(task, progress);
+				console.log("### on_progress_change: ", task, progress);
 			},
 			on_view_change: function(mode) {
-				console.log(mode);
+				console.log("### on_view_change: ", mode);
+			},
+			on_bar_sort: function(task_being_dragged_id, task_being_replaced_id) {
+				console.log("### on_bar_sort: (dragged/replaced) ", task_being_dragged_id, "/", task_being_replaced_id);
 			},
 			view_mode: 'Day',
-			language: 'en'
+			language: 'en',
+			sortable: true,
 		});
-		console.log(gantt_chart);
 	</script>
 </body>
 </html>
