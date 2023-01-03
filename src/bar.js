@@ -192,7 +192,7 @@ export default class Bar {
                 return;
             }
 
-            this.gantt.trigger_event('click', [this.task]);
+            this.gantt.trigger_event('dblclick', [this.task]);
         });
     }
 
