@@ -90,6 +90,7 @@ export default class Gantt {
             sortable: false,
             readonly: false,
             show_progress: true,
+            show_weekends: true,
         };
         this.options = Object.assign({}, default_options, options);
     }
@@ -187,7 +188,7 @@ export default class Gantt {
 
         if (view_mode === VIEW_MODE.DAY) {
             this.options.step = 24;
-            this.options.column_width = 38;
+            this.options.column_width = 38; // 38
         } else if (view_mode === VIEW_MODE.HALF_DAY) {
             this.options.step = 24 / 2;
             this.options.column_width = 38;
@@ -305,6 +306,9 @@ export default class Gantt {
         this.make_grid_header();
         this.make_grid_ticks();
         this.make_grid_highlights();
+        if (this.options.show_weekends) {
+            this.make_grid_weekends();
+        }
     }
 
     make_grid_background() {
@@ -445,6 +449,44 @@ export default class Gantt {
         }
     }
 
+    /**
+     * Make grid background for weekends.
+     * Saturdays and Sundays are colored with a light gray background.
+     */
+    make_grid_weekends() {
+        // highlight weekends in DAY mode
+        if (this.view_is(VIEW_MODE.DAY)) {
+            const border_width = 1; // 1px border
+            const y = 0 + border_width;
+            const width = this.options.column_width;
+            const height =
+                (this.options.bar_height + this.options.padding) *
+                    this.tasks.length +
+                this.options.header_height +
+                this.options.padding / 2 -
+                border_width;
+
+            // loop through all dates and check if it's a Saturday or Sunday
+            for (let date of this.dates) {
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    let x =
+                        (date_utils.diff(date, this.gantt_start, 'hour') /
+                            this.options.step) *
+                        this.options.column_width;
+
+                    createSVG('rect', {
+                        x,
+                        y,
+                        width,
+                        height,
+                        class: 'weekend-highlight',
+                        append_to: this.layers.grid,
+                    });
+                }
+            }
+        }
+    }
+
     make_dates() {
         for (let date of this.get_dates_to_draw()) {
             createSVG('text', {
@@ -525,11 +567,19 @@ export default class Gantt {
                     : '',
             Day_upper:
                 date.getMonth() !== last_date.getMonth()
-                    ? date_utils.format(date, 'MMMM YYYY', this.options.language)
+                    ? date_utils.format(
+                          date,
+                          'MMMM YYYY',
+                          this.options.language
+                      )
                     : '',
             Week_upper:
                 date.getMonth() !== last_date.getMonth()
-                    ? date_utils.format(date, 'MMMM YYYY', this.options.language)
+                    ? date_utils.format(
+                          date,
+                          'MMMM YYYY',
+                          this.options.language
+                      )
                     : '',
             Month_upper:
                 date.getFullYear() !== last_date.getFullYear()
