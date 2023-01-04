@@ -1245,6 +1245,7 @@ var Gantt = (function () {
         setup_gantt_dates() {
             this.gantt_start = this.gantt_end = null;
 
+            // calculate gantt_start and gantt_end date based on tasks
             for (let task of this.tasks) {
                 // set global start and end date
                 if (!this.gantt_start || task._start < this.gantt_start) {
