@@ -73,7 +73,7 @@
   outline: none;
 }
 .gantt .bar-wrapper:hover .bar {
-  fill: #a9b5c1;
+  /* fill: darken($bar-color, 5); */
   stroke-width: 2;
 }
 .gantt .bar-wrapper:hover .bar-progress {
@@ -84,7 +84,7 @@
   opacity: 1;
 }
 .gantt .bar-wrapper.active .bar {
-  fill: #a9b5c1;
+  /* fill: darken($bar-color, 5); */
 }
 .gantt .bar-wrapper.active .bar-progress {
   fill: #1184e9;
