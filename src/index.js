@@ -89,6 +89,7 @@ export default class Gantt {
             language: 'en',
             sortable: false,
             readonly: false,
+            show_progress: true,
         };
         this.options = Object.assign({}, default_options, options);
     }

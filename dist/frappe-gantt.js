@@ -556,18 +556,19 @@ var Gantt = (function () {
 
         draw_progress_bar() {
             if (this.invalid) return;
-            this.$bar_progress = createSVG('rect', {
-                x: this.x,
-                y: this.y,
-                width: this.progress_width,
-                height: this.height,
-                rx: this.corner_radius,
-                ry: this.corner_radius,
-                class: 'bar-progress',
-                append_to: this.bar_group,
-            });
-
-            animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+            if (this.gantt.options.show_progress) {
+                this.$bar_progress = createSVG('rect', {
+                    x: this.x,
+                    y: this.y,
+                    width: this.progress_width,
+                    height: this.height,
+                    rx: this.corner_radius,
+                    ry: this.corner_radius,
+                    class: 'bar-progress',
+                    append_to: this.bar_group,
+                });
+                animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+            }
         }
 
         draw_label() {
@@ -610,12 +611,15 @@ var Gantt = (function () {
                 append_to: this.handle_group,
             });
 
-            if (this.task.progress >= 0 && this.task.progress <= 100) {
-                this.$handle_progress = createSVG('polygon', {
-                    points: this.get_progress_polygon_points().join(','),
-                    class: 'handle progress',
-                    append_to: this.handle_group,
-                });
+            // create progress handles, when progress is enabled
+            if (this.gantt.options.show_progress) {
+                if (this.task.progress >= 0 && this.task.progress <= 100) {
+                    this.$handle_progress = createSVG('polygon', {
+                        points: this.get_progress_polygon_points().join(','),
+                        class: 'handle progress',
+                        append_to: this.handle_group,
+                    });
+                }
             }
         }
 
@@ -705,7 +709,9 @@ var Gantt = (function () {
                 this.update_attr(bar, 'y', y);
             }
             this.update_label_position();
-            this.update_progressbar_position();
+            if (this.gantt.options.show_progress) {
+                this.update_progressbar_position();
+            }
             this.update_handle_position();
             this.update_arrow_position();
         }
@@ -1124,6 +1130,7 @@ var Gantt = (function () {
                 language: 'en',
                 sortable: false,
                 readonly: false,
+                show_progress: true,
             };
             this.options = Object.assign({}, default_options, options);
         }

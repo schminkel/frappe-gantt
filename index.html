@@ -14,10 +14,18 @@
 			width: 80%;
 			margin: 0 auto;
 		}
-		/* custom class */
+		/* custom classes */
 		.gantt .bar-milestone .bar {
-			fill: tomato;
+			fill: #dc2626; /* red-600 */
 		}
+		.gantt .bar-blue .bar {
+			fill: #2563eb; /* blue-600 */
+		}
+		.gantt .bar-green .bar {
+			fill: #16a34a; /* green-600 */
+		}
+		/* tailwindcss colors */
+		/* https://tailwindcss.com/docs/customizing-colors */
 	</style>
 </head>
 <body>
@@ -32,7 +40,8 @@
 				end: '2022-10-08',
 				name: 'Redesign website 0',
 				id: "Task 0",
-				progress: 20
+				progress: 20,
+				custom_class: 'bar-blue'
 			},
 			{
 				start: '2022-10-03',
@@ -40,7 +49,8 @@
 				name: 'Write new content 1',
 				id: "Task 1",
 				progress: 5,
-				dependencies: 'Task 0'
+				dependencies: 'Task 0',
+				custom_class: 'bar-blue'
 			},
 			{
 				start: '2022-10-04',
@@ -48,7 +58,8 @@
 				name: 'Apply new styles 2',
 				id: "Task 2",
 				progress: 10,
-				dependencies: 'Task 1'
+				dependencies: 'Task 1',
+				custom_class: 'bar-blue'
 			},
 			{
 				start: '2022-10-08',
@@ -56,7 +67,8 @@
 				name: 'Review 3',
 				id: "Task 3",
 				progress: 5,
-				dependencies: 'Task 2'
+				dependencies: 'Task 2',
+				custom_class: 'bar-green'
 			},
 			{
 				start: '2022-10-08',
@@ -64,7 +76,8 @@
 				name: 'Deploy 4',
 				id: "Task 4",
 				progress: 0,
-				dependencies: 'Task 2'
+				dependencies: 'Task 2',
+				custom_class: 'bar-green'
 			},
 			{
 				start: '2022-10-11',
@@ -96,6 +109,7 @@
 			language: 'en',
 			sortable: true,
 			readonly: true,
+			show_progress: false,
 		});
 	</script>
 </body>
