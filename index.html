@@ -3,6 +3,85 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Simple Gantt</title>
+	<script>
+		var website_creation = [
+			{
+				start: '2023-01-01',
+				end: '2023-01-08',
+				name: 'Redesign Website',
+				id: "Task 0",
+				progress: 20,
+				custom_class: 'bar-blue'
+			},
+			{
+				start: '2023-01-03',
+				end: '2023-01-06',
+				name: 'Write New Content',
+				id: "Task 1",
+				progress: 5,
+				dependencies: 'Task 0',
+				custom_class: 'bar-blue'
+			},
+			{
+				start: '2023-01-04',
+				end: '2023-01-08',
+				name: 'Apply New Styles',
+				id: "Task 2",
+				progress: 10,
+				dependencies: 'Task 1',
+				custom_class: 'bar-blue'
+			},
+			{
+				start: '2023-01-08',
+				end: '2023-01-09',
+				name: 'Review Changes',
+				id: "Task 3",
+				progress: 5,
+				dependencies: 'Task 2',
+				custom_class: 'bar-green'
+			},
+			{
+				start: '2023-01-08',
+				end: '2023-01-10',
+				name: 'Deploy Changes',
+				id: "Task 4",
+				progress: 0,
+				dependencies: 'Task 2',
+				custom_class: 'bar-green'
+			},
+			{
+				start: '2023-01-11',
+				end: '2023-01-11',
+				name: 'Go Live!',
+				id: "Task 5",
+				progress: 0,
+				dependencies: 'Task 4',
+				custom_class: 'bar-milestone'
+			}
+		]
+
+		var projectplan = [
+			{
+				start: '2023-01-01',
+				end: '2023-01-08',
+				name: 'Projectplan',
+				id: "Task 0",
+				progress: 20,
+				custom_class: 'bar-blue'
+			}
+		]
+
+		var colorful = [
+			{
+				start: '2023-01-01',
+				end: '2023-01-08',
+				name: 'Colorful',
+				id: "Task 0",
+				progress: 20,
+				custom_class: 'bar-blue'
+			}
+		]
+	</script>
 	<link rel="stylesheet" href="dist/frappe-gantt.css" />
 	<script>
 		var _gantt_chart = null;
@@ -11,6 +90,8 @@
 		var _sortable_mode = false;
 		var _show_progress = false;
 		var _show_weekends = false;
+		var _popup_trigger = 'none';
+		var _tasks = website_creation;
 	</script>
 	<script src="dist/frappe-gantt.js"></script>
 	<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -167,13 +248,49 @@
 					init_gantt();
 				}
 			}
+
+			/* SWITCH bar popups from show on mouseover to NOT shown */
+			const switch_popup_trigger = () => {
+				const enabled = document.getElementById('switch_popup_trigger').classList.contains('bg-green-600');
+				if (enabled) {
+					document.getElementById('switch_popup_trigger').classList.remove('bg-green-600');
+					document.getElementById('switch_popup_trigger').classList.add('bg-gray-200');
+					document.getElementById('switch_span_popup_trigger').classList.remove('translate-x-5');
+					document.getElementById('switch_span_popup_trigger').classList.add('translate-x-0');
+					_popup_trigger = 'none';
+					init_gantt();
+				} else {
+					document.getElementById('switch_popup_trigger').classList.remove('bg-gray-200');
+					document.getElementById('switch_popup_trigger').classList.add('bg-green-600');
+					document.getElementById('switch_span_popup_trigger').classList.remove('translate-x-0');
+					document.getElementById('switch_span_popup_trigger').classList.add('translate-x-5');
+					_popup_trigger = 'mouseover';
+					init_gantt();
+				}
+			}
+
+			/* DROPDOWN for loading different data */
+			const dropdown_data_loader = (dropdown) => {
+
+				if (dropdown.value === "Website Creation") {
+					_gantt_chart.refresh(website_creation);
+					_tasks = website_creation;
+				} else if (dropdown.value === "Projectplan") {
+					_gantt_chart.refresh(projectplan);
+					_tasks = projectplan;
+				} else if (dropdown.value === "Colorful Bars") {
+					_gantt_chart.refresh(colorful);
+					_tasks = colorful;
+				}
+				console.log('### dropdown selected: ', dropdown.value);
+			}
 		</script>
 
 		<div class="mt-6 mb-2 text-sm">Gantt Configuration:</div>
 
 		<!-- Switch readonly mode for gantt chart -->
 		<div class="flex items-center mb-2">
-			<button type="button" id="switch_readonly_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_readonly_mode()">
+			<button type="button" id="switch_readonly_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_readonly_mode()">
 				<span aria-hidden="true" id="switch_span_readonly_mode" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
 			</button>
 			<span class="ml-3" id="annual-billing-label">
@@ -184,7 +301,7 @@
 
 		<!-- Switch sortable mode for gantt chart -->
 		<div class="flex items-center mb-2">
-			<button type="button" id="switch_sortable_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_sortable_mode()">
+			<button type="button" id="switch_sortable_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_sortable_mode()">
 				<span aria-hidden="true" id="switch_span_sortable_mode" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
 			</button>
 			<span class="ml-3" id="annual-billing-label">
@@ -195,7 +312,7 @@
 
 		<!-- Switch show progress on bars for gantt chart -->
 		<div class="flex items-center mb-2">
-			<button type="button" id="switch_show_progress" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_progress()">
+			<button type="button" id="switch_show_progress" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_progress()">
 				<span aria-hidden="true" id="switch_span_show_progress" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
 			</button>
 			<span class="ml-3" id="annual-billing-label">
@@ -206,7 +323,7 @@
 
 		<!-- Switch show weekends as shaddow in gantt chart -->
 		<div class="flex items-center mb-2">
-			<button type="button" id="switch_show_weekends" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_weekends()">
+			<button type="button" id="switch_show_weekends" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_weekends()">
 				<span aria-hidden="true" id="switch_span_show_weekends" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
 			</button>
 			<span class="ml-3" id="annual-billing-label">
@@ -215,86 +332,71 @@
 			</span>
 		</div>
 
+		<!-- Switch bar popups from show on mouseover to NOT shown -->
+		<div class="flex items-center mb-2">
+			<button type="button" id="switch_popup_trigger" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_popup_trigger()">
+				<span aria-hidden="true" id="switch_span_popup_trigger" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+			</button>
+			<span class="ml-3" id="annual-billing-label">
+				<span class="text-sm font-medium text-gray-900">show bar-popup</span>
+				<span class="text-sm text-gray-500">(gantt chart shows popup on bars with detailed infomation when mouseover)</span>
+			</span>
+		</div>
 
 
 		<!-- View Changer Button Group -->
 		<div class="mt-6 mb-2 text-sm">Gantt View Modes:</div>
 		<span class="isolate inline-flex shadow-sm mb-5">
-			<button type="button" id="quarter_day_button" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="quarter_day()">Quarter Day</button>
-			<button type="button" id="half_day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="half_day()">Half Day</button>
-			<button type="button" id="day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500 bg-slate-200" onclick="day()">Day</button>
-			<button type="button" id="week_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="week()">Week</button>
-			<button type="button" id="month_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="month()">Month</button>
-			<button type="button" id="year_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="year()">Year</button>
+			<button type="button" id="quarter_day_button" class="rounded-l-md relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="quarter_day()">Quarter Day</button>
+			<button type="button" id="half_day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="half_day()">Half Day</button>
+			<button type="button" id="day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500 bg-slate-200" onclick="day()">Day</button>
+			<button type="button" id="week_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="week()">Week</button>
+			<button type="button" id="month_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="month()">Month</button>
+			<button type="button" id="year_button" class="rounded-r-md relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="year()">Year</button>
 		</span>
 
 		<div class="gantt-target"></div>
 
+		<!-- MESSAGE -->
+		<div class="rounded-md bg-yellow-50 p-4 mt-6 mb-6">
+			<div class="flex">
+				<div class="flex-shrink-0">
+					<!-- Heroicon name: mini/exclamation-triangle -->
+					<svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+						<path fill-rule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+					</svg>
+				</div>
+				<div class="ml-3">
+					<h3 class="text-sm font-medium text-yellow-800">Attention</h3>
+					<div class="mt-2 text-sm text-yellow-700">
+						<p>Your changes will not be saved!</p>
+						<p class="pt-1">Changes in the configuration will lead to a reload of the dummy data.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- DROPDOWN for loading different datasets -->
+		<div class="w-52">
+			<label for="location" class="block text-sm font-medium text-gray-700">Load different datasets:</label>
+			<select id="dropdown_data_loader" name="location" class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm" onchange="dropdown_data_loader(this)">
+				<option>Website Creation</option>
+				<option>Projectplan</option>
+				<option>Colorful Bars</option>
+			</select>
+		</div>
+
+		
+
 	</div>
 	<script>
-		var tasks = [
-			{
-				start: '2023-01-01',
-				end: '2023-01-08',
-				name: 'Redesign website 0',
-				id: "Task 0",
-				progress: 20,
-				custom_class: 'bar-blue'
-			},
-			{
-				start: '2023-01-03',
-				end: '2023-01-06',
-				name: 'Write new content 1',
-				id: "Task 1",
-				progress: 5,
-				dependencies: 'Task 0',
-				custom_class: 'bar-blue'
-			},
-			{
-				start: '2023-01-04',
-				end: '2023-01-08',
-				name: 'Apply new styles 2',
-				id: "Task 2",
-				progress: 10,
-				dependencies: 'Task 1',
-				custom_class: 'bar-blue'
-			},
-			{
-				start: '2023-01-08',
-				end: '2023-01-09',
-				name: 'Review 3',
-				id: "Task 3",
-				progress: 5,
-				dependencies: 'Task 2',
-				custom_class: 'bar-green'
-			},
-			{
-				start: '2023-01-08',
-				end: '2023-01-10',
-				name: 'Deploy 4',
-				id: "Task 4",
-				progress: 0,
-				dependencies: 'Task 2',
-				custom_class: 'bar-green'
-			},
-			{
-				start: '2023-01-11',
-				end: '2023-01-11',
-				name: 'Go Live! 5',
-				id: "Task 5",
-				progress: 0,
-				dependencies: 'Task 4',
-				custom_class: 'bar-milestone'
-			}
-		]
-		
+		// Gantt Chart Initialization
 		var init_gantt = () => {
-			
 			// clear gantt_target
 			const gantt_target = document.querySelector(".gantt-target");
 			gantt_target.innerHTML = "";
 			
-			_gantt_chart = new Gantt(".gantt-target", tasks, {
+			_gantt_chart = new Gantt(".gantt-target", _tasks, {
 				on_dblclick: function (task) {
 					console.log("### on_dblclick: ", task);
 				},
@@ -316,6 +418,7 @@
 				readonly: _readonly_mode,
 				show_progress: _show_progress,
 				show_weekends: _show_weekends,
+				popup_trigger: _popup_trigger, // 'mouseover' or null
 			});
 		}
 

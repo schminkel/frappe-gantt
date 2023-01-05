@@ -1112,6 +1112,8 @@ var Gantt = (function () {
             // wrapper element
             this.$container = document.createElement('div');
             this.$container.classList.add('gantt-container');
+            this.$container.classList.add('rounded-md');
+            this.$container.classList.add('bg-white');
 
             const parent_element = this.$svg.parentElement;
             parent_element.appendChild(this.$container);
