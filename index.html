@@ -13,7 +13,8 @@
 		var _show_weekends = false;
 	</script>
 	<script src="dist/frappe-gantt.js"></script>
-	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
 	<style>
 		body {
 			font-family: sans-serif;
@@ -28,7 +29,7 @@
 			fill: #dc2626; /* red-600 */
 		}
 		.gantt .bar-blue .bar {
-			fill: #2563eb; /* blue-600 */
+			fill: #0284c7; /* sky-600 */
 		}
 		.gantt .bar-green .bar {
 			fill: #16a34a; /* green-600 */
@@ -217,7 +218,7 @@
 
 
 		<!-- View Changer Button Group -->
-		<div class="mt-6 mb-2 text-sm">Gantt View Mode:</div>
+		<div class="mt-6 mb-2 text-sm">Gantt View Modes:</div>
 		<span class="isolate inline-flex shadow-sm mb-5">
 			<button type="button" id="quarter_day_button" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="quarter_day()">Quarter Day</button>
 			<button type="button" id="half_day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="half_day()">Half Day</button>
@@ -228,6 +229,7 @@
 		</span>
 
 		<div class="gantt-target"></div>
+
 	</div>
 	<script>
 		var tasks = [

@@ -84,7 +84,7 @@ export default class Gantt {
             padding: 18,
             view_mode: 'Day',
             date_format: 'YYYY-MM-DD',
-            popup_trigger: 'mouseover', // click or mouseover
+            popup_trigger: 'mouseover', // 'click', 'mouseover' or null
             custom_popup_html: null,
             language: 'en',
             sortable: false,
@@ -312,10 +312,13 @@ export default class Gantt {
     }
 
     make_grid_background() {
+        const scroll_bar_height = 15;
+        const border_width = 1;
         const grid_width = this.dates.length * this.options.column_width;
         const grid_height =
+            border_width +
             this.options.header_height +
-            this.options.padding +
+            this.options.padding / 2 +
             (this.options.bar_height + this.options.padding) *
                 this.tasks.length;
 
@@ -329,7 +332,7 @@ export default class Gantt {
         });
 
         $.attr(this.$svg, {
-            height: grid_height + this.options.padding + 100,
+            height: grid_height + scroll_bar_height,
             width: '100%',
         });
     }

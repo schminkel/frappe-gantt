@@ -1,3 +1,5 @@
+import date_utils from './date_utils';
+
 export default class Popup {
     constructor(parent, custom_html) {
         this.parent = parent;
@@ -35,9 +37,15 @@ export default class Popup {
             this.pointer = this.parent.querySelector('.pointer');
         } else {
             // set data
-            this.title.innerHTML = options.title;
-            this.subtitle.innerHTML = options.subtitle;
-            this.parent.style.width = this.parent.clientWidth + 'px';
+            this.title.innerHTML =
+                '<b>' + options.title + '</b><br/>' + options.subtitle + '';
+            const duration = date_utils.diff(
+                options.task._end,
+                options.task._start,
+                'day'
+            );
+            this.subtitle.innerHTML = 'Duration: ' + duration + ' days';
+            this.parent.style.width = 175 + 'px'; // width of popup
         }
 
         // set position
@@ -50,14 +58,13 @@ export default class Popup {
 
         if (options.position === 'left') {
             this.parent.style.left =
-                position_meta.x + (position_meta.width + 10) + 'px';
-            this.parent.style.top = position_meta.y + 'px';
+                position_meta.x + (position_meta.width + 8) + 'px';
+            this.parent.style.top = position_meta.y - 20 + 'px'; // position of popup relative to target
 
             this.pointer.style.transform = 'rotateZ(90deg)';
-            this.pointer.style.left = '-7px';
-            this.pointer.style.top = '2px';
+            this.pointer.style.left = '-5px';
+            this.pointer.style.top = '25px'; // position of pointer relative to popup (2px is top left corner)
         }
-
         // show
         this.parent.style.opacity = 1;
     }
