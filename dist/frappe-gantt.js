@@ -1421,13 +1421,16 @@ var Gantt = (function () {
         }
 
         make_grid_ticks() {
-            let tick_x = 0;
-            let tick_y = this.options.header_height + this.options.padding / 2;
-            let tick_height =
+            const border_width = 1;
+            const header_height = this.options.header_height + 10;
+            const rows_height =
                 (this.options.bar_height + this.options.padding) *
                 this.tasks.length;
+            let tick_x = 0;
 
             for (let date of this.dates) {
+                let tick_y = header_height;
+                let tick_height = rows_height - border_width;
                 let tick_class = 'tick';
                 // thick tick for monday
                 if (this.view_is(VIEW_MODE.DAY) && date.getDate() === 1) {
@@ -1444,6 +1447,12 @@ var Gantt = (function () {
                 // thick ticks for quarters
                 if (this.view_is(VIEW_MODE.MONTH) && date.getMonth() % 3 === 0) {
                     tick_class += ' thick';
+                }
+
+                // thick tick should start from the middle of the header
+                if (tick_class.includes('thick')) {
+                    tick_y = header_height / 2;
+                    tick_height = rows_height + header_height / 2 - border_width;
                 }
 
                 createSVG('path', {
