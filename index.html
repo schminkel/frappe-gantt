@@ -4,7 +4,16 @@
 	<meta charset="UTF-8">
 	<title>Simple Gantt</title>
 	<link rel="stylesheet" href="dist/frappe-gantt.css" />
+	<script>
+		var _gantt_chart = null;
+		var _view_mode = 'Day';
+		var _readonly_mode = false;
+		var _sortable_mode = false;
+		var _show_progress = false;
+		var _show_weekends = false;
+	</script>
 	<script src="dist/frappe-gantt.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
 	<style>
 		body {
 			font-family: sans-serif;
@@ -30,7 +39,194 @@
 </head>
 <body>
 	<div class="container">
-		<h2>Interactive Gantt Chart entirely made in SVG!</h2>
+		<h2 class="text-xl pt-5">Interactive Gantt Chart made in SVG!</h2>
+
+		<script>
+			const reset_button_selection = () => {
+				document.getElementById('quarter_day_button').classList.remove('bg-slate-200');
+				document.getElementById('half_day_button').classList.remove('bg-slate-200');
+				document.getElementById('day_button').classList.remove('bg-slate-200');
+				document.getElementById('week_button').classList.remove('bg-slate-200');
+				document.getElementById('month_button').classList.remove('bg-slate-200');
+				document.getElementById('year_button').classList.remove('bg-slate-200');
+			}
+			const quarter_day = () => {
+				_gantt_chart.change_view_mode('Quarter Day');
+				_view_mode = 'Quarter Day';
+				reset_button_selection();
+				document.getElementById('quarter_day_button').classList.add('bg-slate-200');
+			}
+			const half_day = () => {
+				_gantt_chart.change_view_mode('Half Day');
+				_view_mode = 'Half Day';
+				reset_button_selection();
+				document.getElementById('half_day_button').classList.add('bg-slate-200');
+			}
+			const day = () => {
+				_gantt_chart.change_view_mode('Day');
+				_view_mode = 'Day';
+				reset_button_selection();
+				document.getElementById('day_button').classList.add('bg-slate-200');
+			}
+			const week = () => {
+				_gantt_chart.change_view_mode('Week');
+				_view_mode = 'Week';
+				reset_button_selection();
+				document.getElementById('week_button').classList.add('bg-slate-200');
+			}
+			const month = () => {
+				_gantt_chart.change_view_mode('Month');
+				_view_mode = 'Month';
+				reset_button_selection();
+				document.getElementById('month_button').classList.add('bg-slate-200');
+			}
+			const year = () => {
+				_gantt_chart.change_view_mode('Year');
+				_view_mode = 'Year';
+				reset_button_selection();
+				document.getElementById('year_button').classList.add('bg-slate-200');
+			}
+
+			/* SWITCH readonly mode for gantt chart */
+			const switch_readonly_mode = () => {
+				const enabled = document.getElementById('switch_readonly_mode').classList.contains('bg-green-600');
+				if (enabled) {
+					document.getElementById('switch_readonly_mode').classList.remove('bg-green-600');
+					document.getElementById('switch_readonly_mode').classList.add('bg-gray-200');
+					document.getElementById('switch_span_readonly_mode').classList.remove('translate-x-5');
+					document.getElementById('switch_span_readonly_mode').classList.add('translate-x-0');
+					_readonly_mode = false;
+					init_gantt();
+				} else {
+					document.getElementById('switch_readonly_mode').classList.remove('bg-gray-200');
+					document.getElementById('switch_readonly_mode').classList.add('bg-green-600');
+					document.getElementById('switch_span_readonly_mode').classList.remove('translate-x-0');
+					document.getElementById('switch_span_readonly_mode').classList.add('translate-x-5');
+					_readonly_mode = true;
+					init_gantt();
+				}
+			}
+
+			/* SWITCH sortable mode for gantt chart */
+			const switch_sortable_mode = () => {
+				const enabled = document.getElementById('switch_sortable_mode').classList.contains('bg-green-600');
+				if (enabled) {
+					document.getElementById('switch_sortable_mode').classList.remove('bg-green-600');
+					document.getElementById('switch_sortable_mode').classList.add('bg-gray-200');
+					document.getElementById('switch_span_sortable_mode').classList.remove('translate-x-5');
+					document.getElementById('switch_span_sortable_mode').classList.add('translate-x-0');
+					_sortable_mode = false;
+					init_gantt();
+				} else {
+					document.getElementById('switch_sortable_mode').classList.remove('bg-gray-200');
+					document.getElementById('switch_sortable_mode').classList.add('bg-green-600');
+					document.getElementById('switch_span_sortable_mode').classList.remove('translate-x-0');
+					document.getElementById('switch_span_sortable_mode').classList.add('translate-x-5');
+					_sortable_mode = true;
+					init_gantt();
+				}
+			}
+
+			/* SWITCH show progress on bars for gantt chart */
+			const switch_show_progress = () => {
+				const enabled = document.getElementById('switch_show_progress').classList.contains('bg-green-600');
+				if (enabled) {
+					document.getElementById('switch_show_progress').classList.remove('bg-green-600');
+					document.getElementById('switch_show_progress').classList.add('bg-gray-200');
+					document.getElementById('switch_span_show_progress').classList.remove('translate-x-5');
+					document.getElementById('switch_span_show_progress').classList.add('translate-x-0');
+					_show_progress = false;
+					init_gantt();
+				} else {
+					document.getElementById('switch_show_progress').classList.remove('bg-gray-200');
+					document.getElementById('switch_show_progress').classList.add('bg-green-600');
+					document.getElementById('switch_span_show_progress').classList.remove('translate-x-0');
+					document.getElementById('switch_span_show_progress').classList.add('translate-x-5');
+					_show_progress = true;
+					init_gantt();
+				}
+			}
+
+			/* SWITCH show weekends as shaddow in gantt chart */
+			const switch_show_weekends = () => {
+				const enabled = document.getElementById('switch_show_weekends').classList.contains('bg-green-600');
+				if (enabled) {
+					document.getElementById('switch_show_weekends').classList.remove('bg-green-600');
+					document.getElementById('switch_show_weekends').classList.add('bg-gray-200');
+					document.getElementById('switch_span_show_weekends').classList.remove('translate-x-5');
+					document.getElementById('switch_span_show_weekends').classList.add('translate-x-0');
+					_show_weekends = false;
+					init_gantt();
+				} else {
+					document.getElementById('switch_show_weekends').classList.remove('bg-gray-200');
+					document.getElementById('switch_show_weekends').classList.add('bg-green-600');
+					document.getElementById('switch_span_show_weekends').classList.remove('translate-x-0');
+					document.getElementById('switch_span_show_weekends').classList.add('translate-x-5');
+					_show_weekends = true;
+					init_gantt();
+				}
+			}
+		</script>
+
+		<div class="mt-6 mb-2 text-sm">Gantt Configuration:</div>
+
+		<!-- Switch readonly mode for gantt chart -->
+		<div class="flex items-center mb-2">
+			<button type="button" id="switch_readonly_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_readonly_mode()">
+				<span aria-hidden="true" id="switch_span_readonly_mode" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+			</button>
+			<span class="ml-3" id="annual-billing-label">
+				<span class="text-sm font-medium text-gray-900">readonly mode</span>
+				<span class="text-sm text-gray-500">(gantt bars can not be changed via drag & drop)</span>
+			</span>
+		</div>
+
+		<!-- Switch sortable mode for gantt chart -->
+		<div class="flex items-center mb-2">
+			<button type="button" id="switch_sortable_mode" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_sortable_mode()">
+				<span aria-hidden="true" id="switch_span_sortable_mode" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+			</button>
+			<span class="ml-3" id="annual-billing-label">
+				<span class="text-sm font-medium text-gray-900">sortable mode</span>
+				<span class="text-sm text-gray-500">(gantt bars can be moved across rows)</span>
+			</span>
+		</div>
+
+		<!-- Switch show progress on bars for gantt chart -->
+		<div class="flex items-center mb-2">
+			<button type="button" id="switch_show_progress" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_progress()">
+				<span aria-hidden="true" id="switch_span_show_progress" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+			</button>
+			<span class="ml-3" id="annual-billing-label">
+				<span class="text-sm font-medium text-gray-900">show progress</span>
+				<span class="text-sm text-gray-500">(gantt bars show progress that can be changed)</span>
+			</span>
+		</div>
+
+		<!-- Switch show weekends as shaddow in gantt chart -->
+		<div class="flex items-center mb-2">
+			<button type="button" id="switch_show_weekends" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-grey-500 focus:ring-offset-2" role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onclick="switch_show_weekends()">
+				<span aria-hidden="true" id="switch_span_show_weekends" class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+			</button>
+			<span class="ml-3" id="annual-billing-label">
+				<span class="text-sm font-medium text-gray-900">show weekends</span>
+				<span class="text-sm text-gray-500">(gantt chart shows the weekends as shaddow)</span>
+			</span>
+		</div>
+
+
+
+		<!-- View Changer Button Group -->
+		<div class="mt-6 mb-2 text-sm">Gantt View Mode:</div>
+		<span class="isolate inline-flex shadow-sm mb-5">
+			<button type="button" id="quarter_day_button" class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="quarter_day()">Quarter Day</button>
+			<button type="button" id="half_day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="half_day()">Half Day</button>
+			<button type="button" id="day_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500 bg-slate-200" onclick="day()">Day</button>
+			<button type="button" id="week_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="week()">Week</button>
+			<button type="button" id="month_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="month()">Month</button>
+			<button type="button" id="year_button" class="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-grey-500 focus:outline-none focus:ring-1 focus:ring-grey-500" onclick="year()">Year</button>
+		</span>
+
 		<div class="gantt-target"></div>
 	</div>
 	<script>
@@ -89,29 +285,40 @@
 				custom_class: 'bar-milestone'
 			}
 		]
-		var gantt_chart = new Gantt(".gantt-target", tasks, {
-			on_dblclick: function (task) {
-				console.log("### on_dblclick: ", task);
-			},
-			on_date_change: function(task, start, end) {
-				console.log("### on_date_change: ", task, start, end);
-			},
-			on_progress_change: function(task, progress) {
-				console.log("### on_progress_change: ", task, progress);
-			},
-			on_view_change: function(mode) {
-				console.log("### on_view_change: ", mode);
-			},
-			on_bar_sort: function(task_being_dragged_id, task_being_replaced_id) {
-				console.log("### on_bar_sort: (dragged/replaced) ", task_being_dragged_id, "/", task_being_replaced_id);
-			},
-			view_mode: 'Day', // Quarter Day, Half Day, Day, Week, Month, Year
-			language: 'en',
-			sortable: true,
-			readonly: false,
-			show_progress: false,
-			show_weekends: true,
-		});
+		
+		var init_gantt = () => {
+			
+			// clear gantt_target
+			const gantt_target = document.querySelector(".gantt-target");
+			gantt_target.innerHTML = "";
+			
+			_gantt_chart = new Gantt(".gantt-target", tasks, {
+				on_dblclick: function (task) {
+					console.log("### on_dblclick: ", task);
+				},
+				on_date_change: function(task, start, end) {
+					console.log("### on_date_change: ", task, start, end);
+				},
+				on_progress_change: function(task, progress) {
+					console.log("### on_progress_change: ", task, progress);
+				},
+				on_view_change: function(mode) {
+					console.log("### on_view_change: ", mode);
+				},
+				on_bar_sort: function(task_being_dragged_id, task_being_replaced_id) {
+					console.log("### on_bar_sort: (dragged/replaced) ", task_being_dragged_id, "/", task_being_replaced_id);
+				},
+				view_mode: _view_mode, // Quarter Day, Half Day, Day, Week, Month, Year
+				language: 'en',
+				sortable: _sortable_mode,
+				readonly: _readonly_mode,
+				show_progress: _show_progress,
+				show_weekends: _show_weekends,
+			});
+		}
+
+		init_gantt();
+		
 	</script>
 </body>
 </html>
