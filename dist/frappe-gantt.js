@@ -1130,7 +1130,7 @@ var Gantt = (function () {
                 padding: 18,
                 view_mode: 'Day',
                 date_format: 'YYYY-MM-DD',
-                popup_trigger: 'click',
+                popup_trigger: 'mouseover', // click or mouseover
                 custom_popup_html: null,
                 language: 'en',
                 sortable: false,
