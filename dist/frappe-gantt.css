@@ -45,6 +45,9 @@
 .gantt .bar-progress {
   fill: #2490ef;
 }
+.gantt .hidden {
+  visibility: hidden;
+}
 .gantt .bar-invalid {
   fill: transparent;
   stroke: #8D99A6;

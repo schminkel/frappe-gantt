@@ -556,18 +556,22 @@ var Gantt = (function () {
 
         draw_progress_bar() {
             if (this.invalid) return;
-            if (this.gantt.options.show_progress) {
-                this.$bar_progress = createSVG('rect', {
-                    x: this.x,
-                    y: this.y,
-                    width: this.progress_width,
-                    height: this.height,
-                    rx: this.corner_radius,
-                    ry: this.corner_radius,
-                    class: 'bar-progress',
-                    append_to: this.bar_group,
-                });
-                animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+
+            this.$bar_progress = createSVG('rect', {
+                x: this.x,
+                y: this.y,
+                width: this.progress_width,
+                height: this.height,
+                rx: this.corner_radius,
+                ry: this.corner_radius,
+                class: 'bar-progress',
+                append_to: this.bar_group,
+            });
+            animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+
+            // add class 'hidden' to bar_progress when show_progress is disabled
+            if (!this.gantt.options.show_progress) {
+                this.$bar_progress.classList.add('hidden');
             }
         }
 
@@ -611,15 +615,18 @@ var Gantt = (function () {
                 append_to: this.handle_group,
             });
 
-            // create progress handles, when progress is enabled
-            if (this.gantt.options.show_progress) {
-                if (this.task.progress >= 0 && this.task.progress <= 100) {
-                    this.$handle_progress = createSVG('polygon', {
-                        points: this.get_progress_polygon_points().join(','),
-                        class: 'handle progress',
-                        append_to: this.handle_group,
-                    });
-                }
+            // create progress handles
+            if (this.task.progress >= 0 && this.task.progress <= 100) {
+                this.$handle_progress = createSVG('polygon', {
+                    points: this.get_progress_polygon_points().join(','),
+                    class: 'handle progress',
+                    append_to: this.handle_group,
+                });
+            }
+
+            // add class 'hidden' to handles when show_progress is disabled
+            if (!this.gantt.options.show_progress) {
+                this.$handle_progress.classList.add('hidden');
             }
         }
 
@@ -709,9 +716,7 @@ var Gantt = (function () {
                 this.update_attr(bar, 'y', y);
             }
             this.update_label_position();
-            if (this.gantt.options.show_progress) {
-                this.update_progressbar_position();
-            }
+            this.update_progressbar_position();
             this.update_handle_position();
             this.update_arrow_position();
         }
