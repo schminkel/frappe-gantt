@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-    <img src="https://schminkel.github.io/frappe-gantt/public/gantt-sample1.jpg"></img>
+    <img src="https://schminkel.github.io/frappe-gantt/public/gantt-sample1.png"></img>
 </p>
 
 ## Install / Run / Build
