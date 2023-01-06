@@ -1,6 +1,6 @@
 {
   "name": "@schminkel/frappe-gantt",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple, modern, interactive gantt library for the web (based on 0.6.1 of frappe/gantt)",
   "main": "src/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/frappe/gantt/issues"
   },
-  "homepage": "https://github.com/frappe/gantt",
+  "homepage": "https://schminkel.github.io/frappe-gantt/",
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.17.0",
