@@ -10,8 +10,7 @@
 </p>
 
 <p align="center">
-    <a href="https://frappe.github.io/gantt">
-        <img src="https://cloud.githubusercontent.com/assets/9355208/21537921/4a38b194-cdbd-11e6-8110-e0da19678a6d.png">
+    <a href="https://github.com/schminkel/frappe-gantt/raw/master/public/gantt-sample1.jpg">
     </a>
 </p>
 
