@@ -20,7 +20,7 @@
 				id: "Task 1",
 				progress: 5,
 				dependencies: 'Task 0',
-				custom_class: 'bar-blue'
+				custom_class: 'bar-sky'
 			},
 			{
 				start: '2023-01-04',
@@ -29,34 +29,34 @@
 				id: "Task 2",
 				progress: 10,
 				dependencies: 'Task 1',
-				custom_class: 'bar-blue'
+				custom_class: 'bar-sky'
 			},
 			{
-				start: '2023-01-08',
-				end: '2023-01-09',
+				start: '2023-01-09',
+				end: '2023-01-11',
 				name: 'Review Changes',
 				id: "Task 3",
-				progress: 5,
+				progress: 20,
 				dependencies: 'Task 2',
 				custom_class: 'bar-green'
 			},
 			{
-				start: '2023-01-08',
-				end: '2023-01-10',
+				start: '2023-01-09',
+				end: '2023-01-13',
 				name: 'Deploy Changes',
 				id: "Task 4",
-				progress: 0,
+				progress: 30,
 				dependencies: 'Task 2',
-				custom_class: 'bar-green'
+				custom_class: 'bar-lime'
 			},
 			{
-				start: '2023-01-11',
-				end: '2023-01-11',
+				start: '2023-01-14',
+				end: '2023-01-15',
 				name: 'Go Live!',
 				id: "Task 5",
-				progress: 0,
+				progress: 10,
 				dependencies: 'Task 4',
-				custom_class: 'bar-milestone'
+				custom_class: 'bar-rose'
 			}
 		]
 
@@ -67,19 +67,43 @@
 				name: 'Projectplan',
 				id: "Task 0",
 				progress: 20,
-				custom_class: 'bar-blue'
-			}
+				custom_class: 'bar-gray'
+			},
 		]
 
 		var colorful = [
 			{
 				start: '2023-01-01',
-				end: '2023-01-08',
-				name: 'Colorful',
+				end: '2023-01-03',
+				name: 'Phase 1',
 				id: "Task 0",
+				progress: 10,
+				custom_class: 'bar-gray'
+			},
+			{
+				start: '2023-01-03',
+				end: '2023-01-05',
+				name: 'Phase 2',
+				id: "Task 1",
 				progress: 20,
-				custom_class: 'bar-blue'
-			}
+				custom_class: 'bar-stone'
+			},
+			{
+				start: '2023-01-05',
+				end: '2023-01-07',
+				name: 'Phase 3',
+				id: "Task 2",
+				progress: 30,
+				custom_class: 'bar-red'
+			},
+			{
+				start: '2023-01-07',
+				end: '2023-01-09',
+				name: 'Phase 4',
+				id: "Task 3",
+				progress: 40,
+				custom_class: 'bar-orange'
+			},
 		]
 	</script>
 	<link rel="stylesheet" href="dist/frappe-gantt.css" />
@@ -105,18 +129,46 @@
 			width: 80%;
 			margin: 0 auto;
 		}
+
 		/* custom classes */
-		.gantt .bar-milestone .bar {
+		/* tailwindcss colors */
+		/* https://tailwindcss.com/docs/customizing-colors */
+
+		.gantt .bar-gray .bar {
+			fill: #4b5563; /* gray-600 */
+		}
+		.gantt .bar-stone .bar {
+			fill: #57534e; /* stone-600 */
+		}
+		.gantt .bar-red .bar {
 			fill: #dc2626; /* red-600 */
 		}
-		.gantt .bar-blue .bar {
-			fill: #0284c7; /* sky-600 */
+		.gantt .bar-orange .bar {
+			fill: #ea580c; /* orange-600 */
+		}
+		.gantt .bar-lime .bar {
+			fill: #65a30d; /* lime-600 */
 		}
 		.gantt .bar-green .bar {
 			fill: #16a34a; /* green-600 */
 		}
-		/* tailwindcss colors */
-		/* https://tailwindcss.com/docs/customizing-colors */
+		.gantt .bar-sky .bar {
+			fill: #0284c7; /* sky-600 */
+		}
+		.gantt .bar-blue .bar {
+			fill: #2563eb; /* blue-600 */
+		}
+		.gantt .bar-violet .bar {
+			fill: #7c3aed; /* violet-600 */
+		}
+		.gantt .bar-pink .bar {
+			fill: #db2777; /* pink-600 */
+		}
+		.gantt .bar-rose .bar {
+			fill: #e11d48; /* rose-600 */
+		}
+		
+		
 	</style>
 </head>
 <body>

@@ -43,7 +43,7 @@
   user-select: none;
 }
 .gantt .bar-progress {
-  fill: #0273ae;
+  fill: rgba(0, 0, 0, 0.25);
 }
 .gantt .hidden {
   visibility: hidden;
@@ -84,7 +84,7 @@
   stroke-width: 2;
 }
 .gantt .bar-wrapper:hover .bar-progress {
-  fill: #0273ae;
+  fill: rgba(0, 0, 0, 0.4);
 }
 .gantt .bar-wrapper:hover .handle {
   visibility: visible;
@@ -94,7 +94,7 @@
   /* fill: darken($bar-color, 5); */
 }
 .gantt .bar-wrapper.active .bar-progress {
-  fill: #0273ae;
+  fill: rgba(0, 0, 0, 0.4);
 }
 .gantt .lower-text, .gantt .upper-text {
   font-size: 12px;
