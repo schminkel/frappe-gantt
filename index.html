@@ -60,15 +60,60 @@
 			}
 		]
 
-		var projectplan = [
+		var waterfall_projectplan = [
 			{
 				start: '2023-01-01',
-				end: '2023-01-08',
-				name: 'Projectplan',
+				end: '2023-03-31',
+				name: 'Requirements Analysis Phase',
 				id: "Task 0",
-				progress: 20,
-				custom_class: 'bar-gray'
+				progress: 30,
+				custom_class: 'bar-slate'
 			},
+			{
+				start: '2023-04-01',
+				end: '2023-06-30',
+				name: 'System Design Phase',
+				id: "Task 1",
+				progress: 5,
+				dependencies: 'Task 0',
+				custom_class: 'bar-stone'
+			},
+			{
+				start: '2023-07-01',
+				end: '2023-11-30',
+				name: 'Implementation Phase',
+				id: "Task 2",
+				progress: 5,
+				dependencies: 'Task 1',
+				custom_class: 'bar-slate'
+			},
+			{
+				start: '2023-12-01',
+				end: '2024-01-31',
+				name: 'Testing Phase',
+				id: "Task 3",
+				progress: 5,
+				dependencies: 'Task 2',
+				custom_class: 'bar-stone'
+			},
+			{
+				start: '2024-02-01',
+				end: '2024-02-28',
+				name: 'Deployment Phase',
+				id: "Task 4",
+				progress: 5,
+				dependencies: 'Task 3',
+				custom_class: 'bar-slate'
+			},
+			{
+				start: '2024-02-29',
+				end: '2024-07-31',
+				name: 'Maintenance Phase',
+				id: "Task 5",
+				progress: 5,
+				dependencies: 'Task 4',
+				custom_class: 'bar-gray'
+			}
 		]
 
 		var colorful = [
@@ -403,12 +448,15 @@
 			const dropdown_data_loader = (dropdown) => {
 
 				if (dropdown.value === "Website Creation") {
+					day();
 					_gantt_chart.refresh(website_creation);
 					_tasks = website_creation;
-				} else if (dropdown.value === "Projectplan") {
-					_gantt_chart.refresh(projectplan);
-					_tasks = projectplan;
+				} else if (dropdown.value === "Waterfall Projectplan") {
+					month();
+					_gantt_chart.refresh(waterfall_projectplan);
+					_tasks = waterfall_projectplan;
 				} else if (dropdown.value === "Colorful Bars") {
+					week();
 					_gantt_chart.refresh(colorful);
 					_tasks = colorful;
 				}
@@ -458,7 +506,7 @@
 			</button>
 			<span class="ml-3" id="annual-billing-label">
 				<span class="text-sm font-medium text-gray-900">show weekends</span>
-				<span class="text-sm text-gray-500">(gantt chart shows the weekends as shaddow)</span>
+				<span class="text-sm text-gray-500">(gantt chart shows the weekends as shaddow in DAY view mode)</span>
 			</span>
 		</div>
 
@@ -511,7 +559,7 @@
 			<label for="location" class="block text-sm font-medium text-gray-700">Load different datasets:</label>
 			<select id="dropdown_data_loader" name="location" class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm" onchange="dropdown_data_loader(this)">
 				<option>Website Creation</option>
-				<option>Projectplan</option>
+				<option>Waterfall Projectplan</option>
 				<option>Colorful Bars</option>
 			</select>
 		</div>
