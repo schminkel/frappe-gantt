@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/schminkel/frappe-gantt/raw/master/public/gantt-sample1.jpg">
+    <a href="https://schminkel.github.io/frappe-gantt/public/gantt-sample1.jpg">
     </a>
 </p>
 
