@@ -575,7 +575,7 @@
 			const gantt_target = document.querySelector(".gantt-target");
 			gantt_target.innerHTML = "";
 			
-			_gantt_chart = new Gantt(".gantt-target", _tasks, {
+			_gantt_chart = new Gantt(".gantt-target", _tasks, "rounded-md bg-white", {
 				on_dblclick: function (task) {
 					console.log("### on_dblclick: ", task);
 				},
@@ -603,12 +603,6 @@
 
 		init_gantt();
 		
-	</script>
-
-	<script defer>
-		// add rounded-md and bg-white to gantt-container at the end of the gantt initialization
-		document.getElementById("gantt-container").classList.add("rounded-md");
-		document.getElementById("gantt-container").classList.add("bg-white");
 	</script>
 
 </body>

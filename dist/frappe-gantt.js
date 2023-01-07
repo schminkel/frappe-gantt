@@ -1067,8 +1067,8 @@ var Gantt = (function () {
     };
 
     class Gantt {
-        constructor(wrapper, tasks, options) {
-            this.setup_wrapper(wrapper);
+        constructor(wrapper, tasks, classNames, options) {
+            this.setup_wrapper(wrapper, classNames);
             this.setup_options(options);
             this.setup_tasks(tasks);
             // initialize with default view mode
@@ -1076,7 +1076,7 @@ var Gantt = (function () {
             this.bind_events();
         }
 
-        setup_wrapper(element) {
+        setup_wrapper(element, classNames) {
             let svg_element, wrapper_element;
 
             // CSS Selector is passed
@@ -1112,6 +1112,9 @@ var Gantt = (function () {
             // wrapper element
             this.$container = document.createElement('div');
             this.$container.classList.add('gantt-container');
+            classNames
+                .split(' ')
+                .forEach((classNames) => this.$container.classList.add(classNames));
             this.$container.id = 'gantt-container';
 
             const parent_element = this.$svg.parentElement;
