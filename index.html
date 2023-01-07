@@ -532,7 +532,9 @@
 			<button type="button" id="year_button" class="rounded-r-md relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500" onclick="year()">Year</button>
 		</span>
 
-		<div class="gantt-target"></div>
+
+		<div class="gantt-target rounded-md bg-white"></div>
+		
 
 		<!-- MESSAGE -->
 		<div class="rounded-md bg-amber-50 p-4 mt-6 mb-6">
@@ -602,5 +604,12 @@
 		init_gantt();
 		
 	</script>
+
+	<script defer>
+		// add rounded-md and bg-white to gantt-container at the end of the gantt initialization
+		document.getElementById("gantt-container").classList.add("rounded-md");
+		document.getElementById("gantt-container").classList.add("bg-white");
+	</script>
+
 </body>
 </html>
